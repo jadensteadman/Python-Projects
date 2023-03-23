@@ -1,0 +1,53 @@
+#Import the necessary modules
+from bs4 import BeautifulSoup
+import requests
+#Use requests module to setup a connection to IMDB URL: 'https://www.imdb.com/chart/toptv'
+source = requests.get('https://www.imdb.com/chart/toptv')
+#Use the HTML Parser to parse the HTML Page and keep store it in a variable called soup
+soup = BeautifulSoup(source.text,'html.parser')
+shows= soup.find('tbody', class_ = "lister-list" ).find_all('tr')
+#Make four lists since you're making different lists with different criterias 
+list1 = []
+list2 = []
+list3 = []
+list4 = []
+#Create files and make the files writen so that the IMDB data can be read
+file1 = open('file1.txt','w')
+file2 = open('file2.txt','w')
+file3 = open('file3.txt','w')
+file4 = open('file4.txt','w')
+
+
+#Datascrape IMDB and inspect the website to find the different td tags and column names
+for show in shows:
+  name = show.find('td', class_ = "titleColumn"). a.text 
+  rating = show.find('td', class_="ratingColumn imdbRating").strong.text
+  year = show.find('td', class_ = "titleColumn").span.text.strip('()')
+  rank = show.find('td', class_ = "titleColumn").get_text(strip=True).split('.')[0]
+ # Use "\n" at the end of the statement so the data can be on different lines
+  list1.append(name)
+  file1.write(rank +" " + name +" " + year +" "+rating + "\n")
+
+   # Write an if/elif statement to have the different criterias sorted into each text file.
+  
+  if(int(year)<2000):
+     list2.append(name)
+     file2.write(rank +" " + name +" " + year +" "+rating+ "\n")
+
+  elif(int(year)>2000):
+     list3.append(name)
+     file3.write(rank +" " + name +" " + year +" "+rating+ "\n")
+
+  if((float(rating)>8.7)):
+    list4.append(name)
+    file4.write(rank +" " + name +" " + year +" "+rating+ "\n")
+
+#print out each list and close each file
+print(len(list1))
+print(len(list2))
+print(len(list3))
+print(len(list4))
+file1.close()
+file2.close()
+file3.close()
+file4.close()
