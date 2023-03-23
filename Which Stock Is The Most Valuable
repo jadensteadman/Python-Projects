@@ -1,0 +1,262 @@
+# Code for Microsoft 
+
+
+#import the packages
+import datetime as dt
+import matplotlib.pyplot as plt
+from matplotlib import style
+import pandas as pd
+import pandas_datareader.data as web
+
+#Pick a style:
+style.use('ggplot')
+
+start = dt.datetime(2022,1,1)
+end = dt.datetime(2022,12,31)
+
+#start=dt.datetime.now() - dt.timedelta(days = 5*365)
+#start=dt.datetime.now() - dt.timedelta(days = 5*365)
+
+#Create a dataframe
+df_msft = web.DataReader('MSFT', 'stooq', start, end)
+
+#flip dates
+
+df_msft2=df_msft
+df_msft2=df_msft2.iloc[::-1]
+
+df_msft2
+
+df_msft2.to_csv('msft.csv')
+
+#Reduce decimal places for easier viewing
+pd.set_option("display.precision", 2)
+
+df_msft = pd.read_csv('msft.csv', parse_dates=True, index_col=0)
+
+df_msft['100ma'] = df_msft['Close'].rolling(window=100, min_periods=0).mean()
+df_msft
+
+#The size for our chart:
+plt.figure(figsize = (12,6))
+#Plotting Adj Close and SMA lines:
+ax1 = plt.subplot2grid((8,1),(0,0),rowspan=5,colspan=1)
+ax2 = plt.subplot2grid((8,1),(6,0),rowspan=3,colspan=1, sharex=ax1)
+
+ax1.plot(df_msft.index,df_msft['Close'], 'r',label='Close')
+ax1.plot(df_msft.index,df_msft['100ma'], 'g', label= "100 Moving Average")
+plt.xlabel('Date')
+#ax1.set_xlabel('Date')
+
+ax1.set_ylabel('Closing price ($)')
+ax1.set_title('Close and 100 day Moving Average for MSFT')
+ax1.legend()
+
+ax2.bar(df_msft.index,df_msft['Volume'], label = "Volume", color='b')
+ax2.legend()
+
+plt.show()
+
+# Code for Meta 
+
+#import the packages
+import datetime as dt
+import matplotlib.pyplot as plt
+from matplotlib import style
+import pandas as pd
+import pandas_datareader.data as web
+
+#Pick a style:
+style.use('ggplot')
+
+start = dt.datetime(2022,1,1)
+end = dt.datetime(2022,12,31)
+
+#start=dt.datetime.now() - dt.timedelta(days = 5*365)
+#start=dt.datetime.now() - dt.timedelta(days = 5*365)
+
+#Create a dataframe
+df_meta = web.DataReader('META', 'stooq', start, end)
+
+#flip dates
+
+df_meta2=df_msft
+df_meta2=df_msft2.iloc[::-1]
+
+df_meta2
+
+df_msft2.to_csv('msft.csv')
+
+
+df_meta['100ma'] = df_meta['Close'].rolling(window=100, min_periods=0).mean()
+df_meta
+
+
+#The size for our chart:
+plt.figure(figsize = (12,6))
+#Plotting Adj Close and SMA lines:
+ax1 = plt.subplot2grid((8,1),(0,0),rowspan=5,colspan=1)
+ax2 = plt.subplot2grid((8,1),(6,0),rowspan=3,colspan=1, sharex=ax1)
+
+ax1.plot(df_meta.index,df_meta['Close'], 'r',label='Close')
+ax1.plot(df_meta.index,df_meta['100ma'], 'b', label= "100 Moving Average")
+plt.xlabel('Date')
+#ax1.set_xlabel('Date')
+
+ax1.set_ylabel('Closing price ($)')
+ax1.set_title('Close and 100 day Moving Average for Meta')
+ax1.legend()
+
+ax2.bar(df_meta.index,df_meta['Volume'], label = "Volume", color='b')
+ax2.legend()
+
+plt.show()
+
+# Code for Apple 
+#import the packages
+import datetime as dt
+import matplotlib.pyplot as plt
+from matplotlib import style
+import pandas as pd
+import pandas_datareader.data as web
+
+#Pick a style:
+style.use('ggplot')
+
+start = dt.datetime(2022,1,1)
+end = dt.datetime(2022,12,31)
+
+#Create a dataframe
+df_AAPL = web.DataReader('AAPL', 'stooq', start, end)
+df_ford= web.DataReader('F', 'stooq', start, end)
+df_toyota= web.DataReader('TM', 'stooq', start, end)
+
+#flip dates
+
+df_AAPL2=df_AAPL
+df_AAPL2 = df_AAPL2.iloc[::-1]
+
+df_ford2=df_ford
+df_ford2=df_ford2.iloc[::-1]
+
+df_toyota2=df_toyota
+df_toyota2=df_toyota2.iloc[::-1]
+
+df_AAPL2
+
+#Reduce decimal places for easier viewing
+pd.set_option("display.precision", 2)
+
+
+df_AAPL['100ma'] = df_AAPL['Close'].rolling(window=100, min_periods=0).mean()
+df_AAPL
+
+#The size for our chart:
+plt.figure(figsize = (12,6))
+#Plotting Adj Close and SMA lines:
+ax1 = plt.subplot2grid((8,1),(0,0),rowspan=5,colspan=1)
+ax2 = plt.subplot2grid((8,1),(6,0),rowspan=3,colspan=1, sharex=ax1)
+
+ax1.plot(df_AAPL.index,df_AAPL['Close'], 'r',label='Close')
+ax1.plot(df_AAPL.index,df_AAPL['100ma'], 'g', label= "100 Moving Average")
+plt.xlabel('Date')
+#ax1.set_xlabel('Date')
+
+ax1.set_ylabel('Closing price ($)')
+ax1.set_title('Close and 100 day Moving Average for AAPL')
+ax1.legend()
+
+ax2.bar(df_AAPL.index,df_AAPL['Volume'], label = "Volume", color='b')
+ax2.legend()
+
+plt.show()
+
+!pip install yfinance
+
+# Import all our required packages
+import yfinance as yf
+import numpy as np
+import pandas as pd
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+
+# Pick ticker symbol of our stock
+tkr_str = 'AAPL'
+tkr = yf.Ticker(tkr_str)
+
+# Get stock history for the last 30 days
+tkr_history = tkr.history(period='30d')
+tkr_history.head()
+
+# Get stock history for the last 30 days
+tkr_history = tkr.history(period='30d')
+tkr_history.head()
+
+# Reset the index so we can access the dates
+tkr_history.reset_index(inplace=True)
+tkr_history.head()
+
+# Check the data type of each column
+tkr_history.dtypes
+
+# Calculate elapsed days
+base_date = tkr_history['Date'][0]
+tkr_history['day_num'] = tkr_history['Date'].map(lambda date:(date - base_date).days)
+tkr_history.head()
+
+# Function to draw candlestick
+def draw_candlestick(axis, data, color_up, color_down):
+  # Check if stock closed higher or not
+  if data['Close'] > data['Open']:
+    color = color_up
+  else:
+    color = color_down
+
+  # Plot the candle wick
+  axis.plot([data['day_num'], data['day_num']], [data['Low'], data['High']], linewidth=1.5, color='black', solid_capstyle='round', zorder=2)
+
+  # Draw the candle body
+  rect = mpl.patches.Rectangle((data['day_num'] - 0.25, data['Open']), 0.5, (data['Close'] - data['Open']), facecolor=color, edgecolor='black', linewidth=1.5, zorder=3)
+
+  # Add candle body to the axis
+  axis.add_patch(rect)
+    
+  # Return modified axis
+  return axis
+
+# Function to draw all candlesticks
+def draw_all_candlesticks(axis, data, color_up='white', color_down='black'):
+    for day in range(data.shape[0]):
+        axis = draw_candlestick(axis, data.iloc[day], color_up, color_down)
+    return axis
+
+# Create figure and axes
+fig = plt.figure(figsize=(10, 5), facecolor='white')
+ax = fig.add_subplot(111)
+
+# Colors for candlesticks
+colors = ['#ff4500', '#800080']
+
+# Grid lines
+ax.grid(linestyle='-', linewidth=2, color='white', zorder=1)
+
+# Draw candlesticks
+ax = draw_all_candlesticks(ax, tkr_history, colors[0], colors[1])
+
+# Set ticks to every 5th day
+ax.set_xticks(list(tkr_history['day_num'])[::5])
+ax.set_xticklabels(list(tkr_history['Date'].dt.strftime('%m-%d'))[::5])
+plt.xticks(rotation=50)
+
+# Add dollar signs
+formatter = mpl.ticker.FormatStrFormatter('$%.2f')
+ax.yaxis.set_major_formatter(formatter)
+
+# Append ticker symbol
+ax.text(0, 1.05, tkr_str, va='baseline', ha='left', size=30, transform=ax.transAxes)
+
+# Set axis limits
+ax.set_xlim(-1, tkr_history['day_num'].iloc[-1] + 1)
+
+# Show plot
+plt.show()
